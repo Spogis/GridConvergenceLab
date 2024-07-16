@@ -129,16 +129,18 @@ def add_row(n_clicks, rows, columns):
      Output('gci-results-table', 'columns')],
     Input('calculate-button', 'n_clicks'),
     State('editable-table', 'data'),
+    State('refinement-index', 'value'),
     prevent_initial_call=True
 )
-def calculate_gci(n_clicks, rows):
+def calculate_gci(n_clicks, rows, refine_factor):
+    print(refine_factor)
     if n_clicks > 0:
         variables = [row['variable'] for row in rows]
         results_coarse = [float(row['coarse']) for row in rows]
         results_medium = [float(row['medium']) for row in rows]
         results_fine = [float(row['fine']) for row in rows]
 
-        r = 2  # Fator de refinamento
+        r = refine_factor  # Fator de refinamento
 
         p_values, gci_medium_values, gci_fine_values = calculate_gci_multiple_variables(results_coarse, results_medium,
                                                                                         results_fine, r)

@@ -24,6 +24,24 @@ def layout_GCI():
             'fontWeight': 'bold'
         }),
         html.Div([
+            html.Label("Índice de Refinamento de Malha:", style={
+                'fontSize': '16px',
+                'fontWeight': 'bold',
+                'marginBottom': '10px'
+            }),
+            dcc.Input(id='refinement-index', type='number', value=2, step=0.01, style={
+                'width': '100px',
+                'padding': '10px',
+                'fontSize': '16px',
+                'borderRadius': '10px',
+                'border': '2px solid #3498DB',
+                'textAlign': 'center',
+                'marginBottom': '20px',
+                'marginLeft': '20px'
+            })
+        ], style={'textAlign': 'center', 'marginBottom': '20px'}),
+
+        html.Div([
             dash_table.DataTable(
                 id='editable-table',
                 columns=[
