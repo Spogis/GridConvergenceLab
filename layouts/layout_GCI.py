@@ -10,27 +10,38 @@ from dash import dash_table
 
 
 def load_data():
-    df = pd.read_excel('setups/Var_Table.xlsx')
+    df = pd.read_excel('setups/Var_Table.xlsx', sheet_name='Variables')
     return df.to_dict('records')
+
+
+def load_mesh_sizes():
+    df = pd.read_excel('setups/Var_Table.xlsx', sheet_name='MeshSizes')
+    return df.to_dict('records')
+
+
+def load_volume():
+    df = pd.read_excel('setups/Var_Table.xlsx', sheet_name='Volume')
+    return df['volume'][0]
 
 
 def layout_GCI():
     layout = html.Div([
         html.Br(),
-        html.H1("Cálculo de GCI (Grid Convergence Index)", style={
+        html.H1("GCI Calculation (Grid Convergence Index)", style={
             'textAlign': 'center',
             'color': '#2C3E50',
             'fontFamily': 'Arial, sans-serif',
             'fontWeight': 'bold'
         }),
+
         html.Div([
-            html.Label("Índice de Refinamento de Malha:", style={
+            html.Label("Domain Volume:", style={
                 'fontSize': '16px',
                 'fontWeight': 'bold',
                 'marginBottom': '10px'
             }),
-            dcc.Input(id='refinement-index', type='number', value=2, step=0.01, style={
-                'width': '100px',
+            dcc.Input(id='domain-volume', type='number', style={
+                'width': '300px',
                 'padding': '10px',
                 'fontSize': '16px',
                 'borderRadius': '10px',
@@ -43,12 +54,29 @@ def layout_GCI():
 
         html.Div([
             dash_table.DataTable(
+                id='mesh-sizes-table',
+                columns=[
+                    {'name': 'Coarse Mesh', 'id': 'coarse', 'type': 'numeric'},
+                    {'name': 'Medium Mesh', 'id': 'medium', 'type': 'numeric'},
+                    {'name': 'Fine Mesh', 'id': 'fine', 'type': 'numeric'}
+                ],
+                data=[],
+                editable=True,
+                row_deletable=False,
+                style_table={'width': '80%', 'margin': '0 auto'},
+                style_cell={'textAlign': 'center', 'padding': '10px', 'fontFamily': 'Arial, sans-serif'},
+                style_header={'backgroundColor': '#3498DB', 'color': 'white', 'fontWeight': 'bold'}
+            ),
+        ], style={'marginBottom': '20px'}),
+
+        html.Div([
+            dash_table.DataTable(
                 id='editable-table',
                 columns=[
-                    {'name': 'Variável', 'id': 'variable', 'type': 'text'},
-                    {'name': 'Malha Grosseira', 'id': 'coarse', 'type': 'numeric'},
-                    {'name': 'Malha Média', 'id': 'medium', 'type': 'numeric'},
-                    {'name': 'Malha Fina', 'id': 'fine', 'type': 'numeric'}
+                    {'name': 'Variable', 'id': 'variable', 'type': 'text'},
+                    {'name': 'Coarse Mesh', 'id': 'coarse', 'type': 'numeric'},
+                    {'name': 'Medium Mesh', 'id': 'medium', 'type': 'numeric'},
+                    {'name': 'Fine Mesh', 'id': 'fine', 'type': 'numeric'}
                 ],
                 data=[],
                 editable=True,
@@ -60,7 +88,7 @@ def layout_GCI():
         ], style={'marginBottom': '20px'}),
 
         html.Div([
-            html.Button('Adicionar Linha', id='add-row-button', n_clicks=0, style={
+            html.Button('Add Row', id='add-row-button', n_clicks=0, style={
                 'width': '300px',
                 'backgroundColor': '#1ABC9C',
                 'color': 'white',
@@ -70,7 +98,7 @@ def layout_GCI():
                 'borderRadius': '10px',
                 'cursor': 'pointer'
             }),
-            html.Button('Salvar Tabela', id='save-button', n_clicks=0, style={
+            html.Button('Save Table', id='save-button', n_clicks=0, style={
                 'width': '300px',
                 'backgroundColor': '#1ABC9C',
                 'color': 'white',
@@ -82,7 +110,7 @@ def layout_GCI():
             }),
             dcc.Upload(
                 id='upload-data',
-                children=html.Button('Carregar Tabela', style={
+                children=html.Button('Load Table', style={
                     'width': '300px',
                     'backgroundColor': '#1ABC9C',
                     'color': 'white',
@@ -97,7 +125,7 @@ def layout_GCI():
         ], style={'display': 'flex', 'justifyContent': 'center', 'gap': '10px', 'flexWrap': 'wrap'}),
 
         html.Div([
-            html.Button('Calcular GCI', id='calculate-button', n_clicks=0, style={
+            html.Button('Calculate GCI', id='calculate-button', n_clicks=0, style={
                 'width': '300px',
                 'backgroundColor': '#3498DB',
                 'color': 'white',
@@ -107,7 +135,7 @@ def layout_GCI():
                 'borderRadius': '10px',
                 'cursor': 'pointer'
             }),
-            html.Button('Baixar Resultados GCI', id='download-gci-button', n_clicks=0, style={
+            html.Button('Download GCI Results', id='download-gci-button', n_clicks=0, style={
                 'width': '300px',
                 'backgroundColor': '#3498DB',
                 'color': 'white',

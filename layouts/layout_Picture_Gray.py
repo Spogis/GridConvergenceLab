@@ -4,14 +4,10 @@ import pandas as pd
 from dash.dash_table.Format import Format, Scheme
 import dash_bootstrap_components as dbc
 
-
-from dash import dcc
-from dash import html
-
 def layout_picture_gray():
     layout = html.Div([
         html.Br(),
-        html.H1("Upload de Imagens e Análise de Similaridade", style={
+        html.H1("Image Upload and Similarity Analysis", style={
             'textAlign': 'center',
             'color': '#2C3E50',
             'fontFamily': 'Arial, sans-serif',
@@ -22,8 +18,8 @@ def layout_picture_gray():
                 dcc.Upload(
                     id='upload-image-1',
                     children=html.Div([
-                        'Arraste e solte ou ',
-                        html.A('selecione a imagem 1', style={'color': '#3498DB', 'fontWeight': 'bold'})
+                        'Drag and drop or ',
+                        html.A('select image 1', style={'color': '#3498DB', 'fontWeight': 'bold'})
                     ]),
                     style={
                         'width': '100%',
@@ -43,8 +39,8 @@ def layout_picture_gray():
                 dcc.Upload(
                     id='upload-image-2',
                     children=html.Div([
-                        'Arraste e solte ou ',
-                        html.A('selecione a imagem 2', style={'color': '#3498DB', 'fontWeight': 'bold'})
+                        'Drag and drop or ',
+                        html.A('select image 2', style={'color': '#3498DB', 'fontWeight': 'bold'})
                     ]),
                     style={
                         'width': '100%',
@@ -63,7 +59,7 @@ def layout_picture_gray():
         ], style={'display': 'flex', 'justifyContent': 'center'}),
         html.Br(),
         html.Div([
-            html.Button('Gerar Análise', id='analyze-button', n_clicks=0, style={
+            html.Button('Generate Analysis', id='analyze-button', n_clicks=0, style={
                 'backgroundColor': '#3498DB',
                 'color': 'white',
                 'border': 'none',

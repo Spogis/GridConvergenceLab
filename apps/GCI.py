@@ -1,30 +1,41 @@
 import pandas as pd
 import numpy as np
+from pyGCS import GCI, GCS
 
 
-def calculate_gci_multiple_variables(results_coarse, results_medium, results_fine, r=2):
-    num_vars = len(results_coarse)
-    p_values = np.zeros(num_vars)
-    gci_fine_values = np.zeros(num_vars)
-    gci_medium_values = np.zeros(num_vars)
+def calculate_gci_multiple_variables(values_coarse, values_medium, values_fine,
+                                     nodes_coarse, nodes_medium, nodes_fine, volume):
 
-    for i in range(num_vars):
-        # Calcular a taxa de convergência aparente (p) para cada variável
-        p_values[i] = np.log((results_coarse[i] - results_medium[i]) / (results_medium[i] - results_fine[i])) / np.log(
-            r)
 
-        # Calcular o fator de segurança
-        Fs = 1.25
+    # Listas para armazenar os resultados
+    GCI_fine_list = []
+    GCI_medium_list = []
+    p_list = []
+    GCI_asymptotic_list = []
+    phi_extrapolated_list = []
+    r_fine_list = []
+    r_medium_list = []
 
-        # Calcular o GCI para a malha média e fina
-        gci_fine_values[i] = Fs * np.abs((results_fine[i] - results_medium[i]) / results_fine[i]) / (
-                    r ** p_values[i] - 1)
-        gci_medium_values[i] = Fs * np.abs((results_medium[i] - results_coarse[i]) / results_medium[i]) / (
-                    r ** p_values[i] - 1)
+    for value_coarse, value_medium, value_fine in zip(values_coarse, values_medium, values_fine):
 
-        # Arredondar os valores para 4 casas decimais
-        p_values = np.round(p_values, 4)
-        gci_fine_values = np.round(gci_fine_values, 4)
-        gci_medium_values = np.round(gci_medium_values, 4)
+        gci = GCI(dimension=3, simulation_order=2, volume=volume,
+                  cells=[nodes_fine, nodes_medium, nodes_coarse],
+                  solution=[value_fine, value_medium, value_coarse])
 
-    return p_values, gci_medium_values, gci_fine_values
+        p = gci.get('apparent_order')
+        GCI_asymptotic = gci.get('asymptotic_gci')
+        GCI_fine, GCI_medium = gci.get('gci')
+        phi_extrapolated = gci.get('extrapolated_value')
+        r_fine, r_medium =  gci.get('refinement_ratio')
+
+        # Armazenar os resultados
+        GCI_fine_list.append(GCI_fine)
+        GCI_medium_list.append(GCI_medium)
+        p_list.append(p)
+        GCI_asymptotic_list.append(GCI_asymptotic)
+        phi_extrapolated_list.append(phi_extrapolated)
+        r_fine_list.append(r_fine)
+        r_medium_list.append(r_medium)
+
+    return p_list, GCI_medium_list, GCI_fine_list, GCI_asymptotic_list, phi_extrapolated_list, r_fine_list, r_medium_list
+

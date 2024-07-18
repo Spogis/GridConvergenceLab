@@ -9,7 +9,7 @@ from dash import html
 def layout_XY_Plot():
     layout = html.Div([
         html.Br(),
-        html.H1("Upload de Arquivos Excel e Análise de Dados", style={
+        html.H1("Excel File Upload and Data Analysis", style={
             'textAlign': 'center',
             'color': '#2C3E50',
             'fontFamily': 'Arial, sans-serif',
@@ -20,8 +20,8 @@ def layout_XY_Plot():
                 dcc.Upload(
                     id='upload-data-1',
                     children=html.Div([
-                        'Arraste e solte ou ',
-                        html.A('selecione o arquivo 1', style={'color': '#1ABC9C', 'fontWeight': 'bold'})
+                        'Drag and drop or ',
+                        html.A('select file 1', style={'color': '#1ABC9C', 'fontWeight': 'bold'})
                     ]),
                     style={
                         'width': '100%',
@@ -41,8 +41,8 @@ def layout_XY_Plot():
                 dcc.Upload(
                     id='upload-data-2',
                     children=html.Div([
-                        'Arraste e solte ou ',
-                        html.A('selecione o arquivo 2', style={'color': '#1ABC9C', 'fontWeight': 'bold'})
+                        'Drag and drop or ',
+                        html.A('select file 2', style={'color': '#1ABC9C', 'fontWeight': 'bold'})
                     ]),
                     style={
                         'width': '100%',
@@ -61,7 +61,7 @@ def layout_XY_Plot():
         ], style={'display': 'flex', 'justifyContent': 'center'}),
         html.Br(),
         html.Div([
-            html.Button('Gerar Análise', id='analyze-button', n_clicks=0, style={
+            html.Button('Generate Analysis', id='analyze-button', n_clicks=0, style={
                 'backgroundColor': '#1ABC9C',
                 'color': 'white',
                 'border': 'none',
