@@ -1,33 +1,28 @@
-import dash
-from dash import Input, Output, State, ctx, dash_table, Patch
-from dash import html
-from dash import dcc
-from dash.exceptions import PreventUpdate
-import dash_bootstrap_components as dbc
+import io
+import os
+import base64
 
 import pandas as pd
 import numpy as np
+from math import log10, sqrt
+
+import dash
+from dash import Input, Output, State, ctx, dash_table, Patch
+from dash import html, dcc
+from dash.exceptions import PreventUpdate
+import dash_bootstrap_components as dbc
 
 from scipy.interpolate import interp1d
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics import mean_squared_error, r2_score
 from scipy.stats import pearsonr, spearmanr
 from scipy.spatial.distance import euclidean
-from sklearn.metrics import r2_score
+from skimage.metrics import structural_similarity as ssim
 
-from scipy.stats import pearsonr
-from sklearn.metrics import mean_squared_error
-from math import log10, sqrt
 from PIL import Image
 
 import plotly.graph_objs as go
 import plotly.express as px
-
-from PIL import Image
-from skimage.metrics import structural_similarity as ssim
-
-import io
-import os
-import base64
 
 # Import Layouts
 from layouts.layout_about import *
@@ -42,7 +37,7 @@ from apps.GCI import *
 # Initialize the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-app.title = "Grid Convergence Index (GCI)"
+app.title = "Grid Converge Lab"
 
 server = app.server
 
@@ -333,7 +328,7 @@ def update_output(n_clicks, contents1, filename1, contents2, filename2):
             html.H4(f'MAE: {mae:.4f}'),
             html.H4(f'MSE: {mse:.4f}'),
             html.H4(f'RMSE: {rmse:.4f}'),
-            html.H4(f'Analysis: {analysis_interpretation}')
+            #html.H4(f'Analysis: {analysis_interpretation}')
         ]
 
         # Plot
@@ -442,7 +437,7 @@ def update_output(n_clicks, contents1, filename1, contents2, filename2):
             html.H4(f'Peak Signal-to-Noise Ratio (PSNR): {psnr_value:.4f}'),
             html.H4(f'Normalized Cross-Correlation (NCC): {ncc_value:.4f}'),
             html.H4(f'Spogis Number: {spogis_value:.4f}'),
-            html.H4(f'Analysis: {analysis_interpretation}')
+            #html.H4(f'Analysis: {analysis_interpretation}')
         ]
 
         # Display the images using Plotly Express in grayscale
@@ -545,7 +540,7 @@ def update_output(n_clicks, contents1, filename1, contents2, filename2):
             html.H4(f'Peak Signal-to-Noise Ratio (PSNR): {psnr_value:.4f}'),
             html.H4(f'Normalized Cross-Correlation (NCC): {ncc_value:.4f}'),
             html.H4(f'Spogis Number: {spogis_value:.4f}'),
-            html.H4(f'Analysis: {analysis_interpretation}')
+            #html.H4(f'Analysis: {analysis_interpretation}')
         ]
 
         # Exibir as imagens usando Plotly Express
