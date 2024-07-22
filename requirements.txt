@@ -1,6 +1,6 @@
 pandas~=1.5.3
 numpy~=1.26.4
-pyGCS~=0.4.2
+pyGCS~=1.1.1
 opencv-python~=4.10.0.84
 pillow~=10.3.0
 dash~=2.17.1
