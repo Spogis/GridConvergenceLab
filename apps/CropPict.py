@@ -4,8 +4,8 @@ from PIL import Image, ImageDraw
 import os
 
 # Definir as pastas de entrada e saída
-input_folder  = "../data/Dados_Veloc_Eixos_XYZ_RefiinoCone/Pics"
-output_folder = "../data/Dados_Veloc_Eixos_XYZ_RefiinoCone/EditedPics"
+input_folder  = "../data/Interpolacao"
+output_folder = "../data/Out"
 
 # Função para processar uma única imagem
 def process_image(input_image_path, output_image_path):
