@@ -122,7 +122,6 @@ def update_mesh_table(data):
         return load_volume()
     return data
 
-
 # Callback to add rows to the table
 @app.callback(
     Output('editable-table', 'data', allow_duplicate=True),
@@ -219,6 +218,7 @@ def save_table(n_clicks, rows, mesh, volume):
 @app.callback(
     Output('editable-table', 'data', allow_duplicate=True),
     Output('mesh-sizes-table', 'data', allow_duplicate=True),
+    Output('domain-volume', 'value', allow_duplicate=True),
     Input('upload-data', 'contents'),
     State('upload-data', 'filename'),
     prevent_initial_call=True
@@ -230,7 +230,8 @@ def load_table(contents, filename):
     decoded = base64.b64decode(content_string)
     df = pd.read_excel(io.BytesIO(decoded), sheet_name='Variables')
     df2 = pd.read_excel(io.BytesIO(decoded), sheet_name='MeshSizes')
-    return df.to_dict('records'), df2.to_dict('records')
+    df3 = pd.read_excel(io.BytesIO(decoded), sheet_name='Volume')
+    return df.to_dict('records'), df2.to_dict('records'), df3['volume'][0]
 
 # Callback to download GCI results
 @app.callback(

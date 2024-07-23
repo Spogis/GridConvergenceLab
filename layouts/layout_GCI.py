@@ -21,6 +21,7 @@ def load_mesh_sizes():
 
 def load_volume():
     df = pd.read_excel('setups/Var_Table.xlsx', sheet_name='Volume')
+    print(df['volume'][0])
     return df['volume'][0]
 
 
