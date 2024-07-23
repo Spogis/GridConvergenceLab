@@ -179,7 +179,7 @@ def calculate_gci(n_clicks, rows, mesh, volume):
         df_results['Medium Mesh GCI'] = df_results['Medium Mesh GCI'].map(lambda x: f"{x:.2%}")
         df_results['Fine Mesh GCI'] = df_results['Fine Mesh GCI'].map(lambda x: f"{x:.2%}")
         df_results['GCI Asymptotic'] = df_results['GCI Asymptotic'].map(lambda x: f"{x:.3f}")
-        df_results['phi extrapolated'] = df_results['phi extrapolated'].map(lambda x: f"{x:.3f}")
+        df_results['phi extrapolated'] = df_results['phi extrapolated'].map(lambda x: f"{x:.3e}")
         df_results['r fine mesh'] = df_results['r fine mesh'].map(lambda x: f"{x:.1f}")
         df_results['r medium mesh'] = df_results['r medium mesh'].map(lambda x: f"{x:.1f}")
 
