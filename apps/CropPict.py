@@ -5,7 +5,7 @@ import os
 
 # Definir as pastas de entrada e saída
 input_folder  = "../data/Interpolacao"
-output_folder = "../data/Out"
+output_folder = "../data/Out2"
 
 # Função para processar uma única imagem
 def process_image(input_image_path, output_image_path):
