@@ -30,9 +30,11 @@ from layouts.layout_GCI import *
 from layouts.layout_PlotXY import *
 from layouts.layout_Picture_Gray import *
 from layouts.layout_Picture_RGB import *
+from layouts.layout_GCI_from_curves import *
 
 # Import APPS
 from apps.GCI import *
+from apps.gci_from_curve_data import *
 
 # Initialize the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -51,6 +53,10 @@ app.layout = html.Div([
     html.Div([
         dcc.Tabs(id='tabs', value='CGI', children=[
             dcc.Tab(label='GCI', value='CGI',
+                    style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
+                    selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
+
+            dcc.Tab(label='GCI From Curves', value='CGI_from_curves',
                     style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
                     selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
 
@@ -80,6 +86,8 @@ app.layout = html.Div([
 def update_tab_content(selected_tab):
     if selected_tab == 'CGI':
         return layout_GCI()
+    if selected_tab == 'CGI_from_curves':
+        return layout_GCI_from_curves()
     if selected_tab == 'XY_Plot':
         return layout_XY_Plot()
     if selected_tab == 'Picture_Gray':
@@ -259,12 +267,47 @@ def parse_contents(contents):
 
 @app.callback(
     [Output('output-file-upload-1', 'children'),
-     Output('output-file-upload-2', 'children')],
+     Output('output-file-upload-2', 'children'),
+     Output('output-file-upload-3', 'children')],
     [Input('upload-data-1', 'filename'),
-     Input('upload-data-2', 'filename')]
+     Input('upload-data-2', 'filename'),
+     Input('upload-data-3', 'filename')]
 )
-def update_filenames(filename1, filename2):
-    return f'File 1: {filename1}', f'File 2: {filename2}'
+def update_filenames(filename1, filename2, filename3):
+    return f'File 1: {filename1}', f'File 2: {filename2}', f'File 3: {filename3}'
+
+
+@app.callback(
+    [Output('editable-table', 'data', allow_duplicate=True)],
+    [Input('import-data-button', 'n_clicks')],
+    [State('upload-data-1', 'contents'),
+     State('upload-data-2', 'contents'),
+     State('upload-data-3', 'contents'),
+     State('splits', 'value'),
+     ],
+    prevent_initial_call=True)
+
+
+def import_data_from_curves(n_clicks, contents1, contents2, contents3, splits):
+    if n_clicks > 0 and contents1 and contents2 and contents3:
+        content1_type, content1_string = contents1.split(',')
+        decoded1 = base64.b64decode(content1_string)
+
+        content2_type, content2_string = contents2.split(',')
+        decoded2 = base64.b64decode(content2_string)
+
+        content3_type, content3_string = contents3.split(',')
+        decoded3 = base64.b64decode(content3_string)
+
+        df_coarse = pd.read_excel(io.BytesIO(decoded1))
+        df_medium = pd.read_excel(io.BytesIO(decoded2))
+        df_fine = pd.read_excel(io.BytesIO(decoded3))
+
+        gci_from_curve_data(df_coarse, df_medium, df_fine, splits)
+        df_data = pd.read_excel('data/curve_for_gci.xlsx')
+        return [df_data.to_dict('records')]
+    return []
+
 
 @app.callback(
     [Output('output-analysis', 'children'),
