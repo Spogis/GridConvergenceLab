@@ -14,7 +14,6 @@ def gci_from_curve_data(df_coarse, df_medium, df_fine, N_Splits):
     spline_medium = interp1d(df_medium['x'], df_medium['y'], kind='cubic', fill_value="extrapolate")
     spline_fine = interp1d(df_fine['x'], df_fine['y'], kind='cubic', fill_value="extrapolate")
 
-
     y_coarse_interp = spline_coarse(x_common)
     y_medium_interp = spline_medium(x_common)
     y_fine_interp = spline_fine(x_common)
@@ -27,6 +26,7 @@ def gci_from_curve_data(df_coarse, df_medium, df_fine, N_Splits):
     df_curve_for_gci = pd.DataFrame({'variable': phi_names,
                                      'coarse': y_coarse_interp,
                                      'medium': y_medium_interp,
-                                     'fine': y_fine_interp,})
+                                     'fine': y_fine_interp,
+                                     'x': x_common})
 
     df_curve_for_gci.to_excel('data/curve_for_gci.xlsx', index=False)

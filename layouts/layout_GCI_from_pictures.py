@@ -9,26 +9,10 @@ from dash import dcc
 from dash import dash_table
 
 
-def load_data():
-    df = pd.read_excel('setups/Var_Table.xlsx', sheet_name='Variables')
-    return df.to_dict('records')
-
-
-def load_mesh_sizes():
-    df = pd.read_excel('setups/Var_Table.xlsx', sheet_name='MeshSizes')
-    return df.to_dict('records')
-
-
-def load_volume():
-    df = pd.read_excel('setups/Var_Table.xlsx', sheet_name='Volume')
-    print(df['volume'][0])
-    return df['volume'][0]
-
-
-def layout_GCI_from_curves():
+def layout_GCI_from_pictures():
     layout = html.Div([
         html.Br(),
-        html.H1("GCI Calculation (Grid Convergence Index) from Curves", style={
+        html.H1("GCI Calculation (Grid Convergence Index) from Pictures", style={
             'textAlign': 'center',
             'color': '#2C3E50',
             'fontFamily': 'Arial, sans-serif',
@@ -51,27 +35,6 @@ def layout_GCI_from_curves():
                 'marginBottom': '20px',
                 'marginLeft': '20px'
             }),
-
-            html.Label("Number of Splits:", style={
-                'fontSize': '16px',
-                'fontWeight': 'bold',
-                'marginBottom': '10px',
-                'marginLeft': '20px'
-            }),
-            dcc.Input(id='splits', type='number',
-                      value=21,  # valor inicial
-                      min=3,  # valor mínimo
-                      step=1,  # step
-                      style={
-                          'width': '100px',
-                          'padding': '10px',
-                          'fontSize': '16px',
-                          'borderRadius': '10px',
-                          'border': '2px solid #3498DB',
-                          'textAlign': 'center',
-                          'marginBottom': '20px',
-                          'marginLeft': '20px'
-            })
         ], style={'textAlign': 'center', 'marginBottom': '20px'}),
 
         html.Div([
@@ -97,7 +60,7 @@ def layout_GCI_from_curves():
                     id='upload-data-1',
                     children=html.Div([
                         'Drag and drop or ',
-                        html.A('select coarse mesh data file', style={'color': '#1ABC9C', 'fontWeight': 'bold'})
+                        html.A('select coarse mesh picture file', style={'color': '#1ABC9C', 'fontWeight': 'bold'})
                     ]),
                     style={
                         'width': '100%',
@@ -118,7 +81,7 @@ def layout_GCI_from_curves():
                     id='upload-data-2',
                     children=html.Div([
                         'Drag and drop or ',
-                        html.A('select medium mesh data file', style={'color': '#1ABC9C', 'fontWeight': 'bold'})
+                        html.A('select medium mesh picture file', style={'color': '#1ABC9C', 'fontWeight': 'bold'})
                     ]),
                     style={
                         'width': '100%',
@@ -139,7 +102,7 @@ def layout_GCI_from_curves():
                     id='upload-data-3',
                     children=html.Div([
                         'Drag and drop or ',
-                        html.A('select fine mesh data file', style={'color': '#1ABC9C', 'fontWeight': 'bold'})
+                        html.A('select fine mesh picture file', style={'color': '#1ABC9C', 'fontWeight': 'bold'})
                     ]),
                     style={
                         'width': '100%',
@@ -160,7 +123,7 @@ def layout_GCI_from_curves():
 
         html.Div([
             html.Br(),
-            html.Button('Import Data From Curves', id='import-data-button', n_clicks=0, style={
+            html.Button('Import Data From Pictures', id='import-pictures-data-button', n_clicks=0, style={
                 'width': '300px',
                 'backgroundColor': '#3498DB',
                 'color': 'white',
@@ -170,11 +133,6 @@ def layout_GCI_from_curves():
                 'borderRadius': '10px',
                 'cursor': 'pointer'
             }),
-        ], style={'display': 'flex', 'justifyContent': 'center', 'gap': '10px', 'flexWrap': 'wrap'}),
-
-        html.Div([
-            html.Br(),
-            dcc.Graph(id='xy-data-graph', style={'margin': '20px auto', 'display': 'none', 'width': '100%'})
         ], style={'display': 'flex', 'justifyContent': 'center', 'gap': '10px', 'flexWrap': 'wrap'}),
 
         html.Div([

@@ -31,10 +31,12 @@ from layouts.layout_PlotXY import *
 from layouts.layout_Picture_Gray import *
 from layouts.layout_Picture_RGB import *
 from layouts.layout_GCI_from_curves import *
+from layouts.layout_GCI_from_pictures import *
 
 # Import APPS
 from apps.GCI import *
 from apps.gci_from_curve_data import *
+from apps.stats_from_pics import *
 
 # Initialize the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -57,6 +59,10 @@ app.layout = html.Div([
                     selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
 
             dcc.Tab(label='GCI From Curves', value='CGI_from_curves',
+                    style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
+                    selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
+
+            dcc.Tab(label='GCI From Pictures', value='CGI_from_pictures',
                     style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
                     selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
 
@@ -88,6 +94,8 @@ def update_tab_content(selected_tab):
         return layout_GCI()
     if selected_tab == 'CGI_from_curves':
         return layout_GCI_from_curves()
+    if selected_tab == 'CGI_from_pictures':
+        return layout_GCI_from_pictures()
     if selected_tab == 'XY_Plot':
         return layout_XY_Plot()
     if selected_tab == 'Picture_Gray':
@@ -278,7 +286,9 @@ def update_filenames(filename1, filename2, filename3):
 
 
 @app.callback(
-    [Output('editable-table', 'data', allow_duplicate=True)],
+    [Output('editable-table', 'data', allow_duplicate=True),
+     Output('xy-data-graph', 'figure'),
+     Output('xy-data-graph', 'style')],
     [Input('import-data-button', 'n_clicks')],
     [State('upload-data-1', 'contents'),
      State('upload-data-2', 'contents'),
@@ -305,8 +315,41 @@ def import_data_from_curves(n_clicks, contents1, contents2, contents3, splits):
 
         gci_from_curve_data(df_coarse, df_medium, df_fine, splits)
         df_data = pd.read_excel('data/curve_for_gci.xlsx')
-        return [df_data.to_dict('records')]
-    return []
+
+
+        ### Plot data from curves
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=df_data['x'], y=df_data['coarse'], mode='lines', name='Coarse Mesh'))
+        fig.add_trace(go.Scatter(x=df_data['x'], y=df_data['medium'], mode='lines', name='Medium Mesh'))
+        fig.add_trace(go.Scatter(x=df_data['x'], y=df_data['fine'], mode='lines', name='Fine Mesh'))
+
+        # Obtendo os valores mínimo e máximo de x para definir os limites
+        x_min = df_data['x'].min()
+        x_max = df_data['x'].max()
+
+        # Definindo explicitamente os valores dos ticks
+        tick_vals = df_data['x']
+
+        fig.update_layout(
+            title='XY Imported Data',
+            xaxis_title='X',
+            yaxis_title='Y',
+            xaxis=dict(
+                range=[x_min, x_max],  # Define os limites do eixo x.
+                tickvals=tick_vals,  # Define explicitamente os valores dos ticks.
+                tickformat='.1f',  # Define o formato dos ticks. '.1f' formata com uma casa decimal.
+                nticks=10  # Define o número de ticks. Ajuste conforme necessário.
+            ),
+            width=1000,
+        )
+
+        print(df_data)
+        # Excluindo a coluna 'x'
+        df_data = df_data.drop('x', axis=1)
+        print(df_data)
+
+        return [df_data.to_dict('records'), fig, {'display': 'block'}]
+    return [[], go.Figure(), {'display': 'none'}]
 
 
 @app.callback(
@@ -603,6 +646,51 @@ def update_output(n_clicks, contents1, filename1, contents2, filename2):
         return result_text, fig1, fig2, fig_diff
 
     return html.Div("Upload images and click the button to analyze"), {}, {}, {}
+
+########################################################################################################################
+#Callbacks Picture CGI
+########################################################################################################################
+
+@app.callback(
+    Output('editable-table', 'data', allow_duplicate=True),
+    Input('import-pictures-data-button', 'n_clicks'),
+    State('upload-data-1', 'contents'),
+    State('upload-data-2', 'contents'),
+    State('upload-data-3', 'contents'),
+    prevent_initial_call=True
+)
+def import_data_from_curves(n_clicks, contents1, contents2, contents3):
+    if n_clicks > 0 and contents1 and contents2 and contents3:
+        def base64_to_cv2_image(contents):
+            content_type, content_string = contents.split(',')
+            decoded = base64.b64decode(content_string)
+            np_arr = np.frombuffer(decoded, np.uint8)
+            img = cv2.imdecode(np_arr, cv2.IMREAD_UNCHANGED)
+            if img is None:
+                raise ValueError("Falha ao decodificar a imagem")
+            return img
+
+        img_coarse = base64_to_cv2_image(contents1)
+        img_medium = base64_to_cv2_image(contents2)
+        img_fine = base64_to_cv2_image(contents3)
+
+        df_coarse = gci_from_picture_data(img_coarse)
+        df_medium = gci_from_picture_data(img_medium)
+        df_fine = gci_from_picture_data(img_fine)
+
+        df_data = df_coarse.copy()
+        df_data.rename(columns={'value': 'coarse'}, inplace=True)
+
+        df_data['medium'] = df_medium['value']
+        df_data['fine'] = df_fine['value']
+
+        print(df_data)
+        df_data.to_excel('setups/Var_Table_GCI_Pictures.xlsx')
+        df = pd.read_excel('setups/Var_Table_GCI_Pictures.xlsx', index_col=None)
+        return df.to_dict('records')
+    return []
+
+
 
 
 if __name__ == '__main__':
