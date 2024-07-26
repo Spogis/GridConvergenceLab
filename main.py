@@ -513,7 +513,8 @@ def update_filenames(filename1, filename2):
 @app.callback(
     [Output('output-analysis-rgb', 'children'),
      Output('output-graph-1-rgb', 'figure'),
-     Output('output-graph-2-rgb', 'figure')],
+     Output('output-graph-2-rgb', 'figure'),
+     Output('output-diff-rgb', 'figure')],
     [Input('analyze-button', 'n_clicks')],
     [State('upload-image-1-rgb', 'contents'),
      State('upload-image-1-rgb', 'filename'),
@@ -591,9 +592,17 @@ def update_output(n_clicks, contents1, filename1, contents2, filename2):
         fig1 = px.imshow(img1_array, title="Imagem 1")
         fig2 = px.imshow(img2_resized_array, title="Imagem 2")
 
-        return result_text, fig1, fig2
+        # Calcular a diferença local entre as imagens usando a distância Euclidiana
+        diff_array = np.linalg.norm(img1_array - img2_resized_array, axis=-1)
 
-    return html.Div("Upload images and click the button to analyze"), {}, {}
+        # Exibir as imagens usando Plotly Express
+        fig1 = px.imshow(img1_array, title="Imagem 1")
+        fig2 = px.imshow(img2_resized_array, title="Imagem 2")
+        fig_diff = px.imshow(diff_array, title="Diferença entre as Imagens", color_continuous_scale='viridis')
+
+        return result_text, fig1, fig2, fig_diff
+
+    return html.Div("Upload images and click the button to analyze"), {}, {}, {}
 
 
 if __name__ == '__main__':

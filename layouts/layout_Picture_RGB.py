@@ -78,7 +78,9 @@ def layout_picture_rgb():
         ], style={'textAlign': 'center'}),
         html.Div(id='output-analysis-rgb', style={'margin': '20px', 'textAlign': 'center', 'fontFamily': 'Arial, sans-serif'}),
         dcc.Graph(id='output-graph-1-rgb', style={'margin': '20px'}),
-        dcc.Graph(id='output-graph-2-rgb', style={'margin': '20px'})
+        dcc.Graph(id='output-graph-2-rgb', style={'margin': '20px'}),
+        dcc.Graph(id='output-diff-rgb', style={'margin': '20px'})
+
     ], style={'fontFamily': 'Arial, sans-serif', 'backgroundColor': '#F8F9F9', 'padding': '20px'})
 
     return layout
