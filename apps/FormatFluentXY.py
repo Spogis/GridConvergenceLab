@@ -2,8 +2,8 @@ import os
 import pandas as pd
 
 # Diretórios de entrada e saída
-input_dir = '../data/Dados_Veloc_Eixos_XYZ_RefiinoCone/XY_file_directory'
-output_dir = '../data/Dados_Veloc_Eixos_XYZ_RefiinoCone/xlsx_output_directory'
+input_dir = '../data/data_Petro/Dados_Veloc_Eixos_XYZ_RefiinoCone/XY_file_directory'
+output_dir = '../data/data_Petro/Dados_Veloc_Eixos_XYZ_RefiinoCone/xlsx_output_directory'
 
 # Certifique-se de que o diretório de saída exista
 os.makedirs(output_dir, exist_ok=True)

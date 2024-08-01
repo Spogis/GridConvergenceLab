@@ -10,7 +10,7 @@ from sklearn.metrics.pairwise import euclidean_distances
 np.random.seed(42)
 
 # Carregar a imagem
-img = mpimg.imread('../data/Dados_Veloc_Eixos_XYZ_RefiinoCone/EditedPics/TM-1imp-Cone-Malha_07_1_edited.png')
+img = mpimg.imread('../data/data_Petro/Dados_Veloc_Eixos_XYZ_RefiinoCone/EditedPics/TM-1imp-Cone-Malha_07_1_edited.png')
 num_points = 20
 margin_percentage = 5  # Ajuste conforme necessário
 
