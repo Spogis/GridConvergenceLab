@@ -46,8 +46,8 @@ def gci_from_picture_data(image):
 
     # Criar o DataFrame com as estatísticas
     data = {
-        'variable': ['Mean', 'Standard Deviation', 'Variance', 'Skewness', 'Kurtosis', 'Coefficient of Variation'],
-        'value': [mean_gray, std_gray, variance_gray, skewness_gray, kurtosis_gray, cv_gray]
+        'variable': ['Mean', 'Standard Deviation', 'Variance', 'Coefficient of Variation'],
+        'value': [mean_gray, std_gray, variance_gray, cv_gray]
     }
 
     df = pd.DataFrame(data)

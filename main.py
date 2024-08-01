@@ -631,8 +631,6 @@ def update_output(n_clicks, contents1, filename1, contents2, filename2):
             #html.H4(f'Analysis: {analysis_interpretation}')
         ]
 
-
-
         # Exibir as imagens usando Plotly Express
         fig1 = px.imshow(img1_array, title="Imagem 1")
         fig2 = px.imshow(img2_resized_array, title="Imagem 2")
