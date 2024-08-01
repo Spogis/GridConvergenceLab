@@ -631,12 +631,33 @@ def update_output(n_clicks, contents1, filename1, contents2, filename2):
             #html.H4(f'Analysis: {analysis_interpretation}')
         ]
 
+
+
         # Exibir as imagens usando Plotly Express
         fig1 = px.imshow(img1_array, title="Imagem 1")
         fig2 = px.imshow(img2_resized_array, title="Imagem 2")
 
         # Calcular a diferença local entre as imagens usando a distância Euclidiana
-        diff_array = np.linalg.norm(img1_array - img2_resized_array, axis=-1)
+        #diff_array = np.linalg.norm(img1_array - img2_resized_array, axis=-1)
+
+        # Converter as imagens para arrays numpy
+        img1_array = np.array(img1)
+        img2_resized_array = np.array(img2_resized)
+
+        # Converter para o espaço de cinza
+        img1_gray = cv2.cvtColor(img1_array, cv2.COLOR_RGB2GRAY)
+        img2_gray = cv2.cvtColor(img2_resized_array, cv2.COLOR_RGB2GRAY)
+
+        # Calcular o SSIM entre as duas imagens
+        ssim_index, diff = ssim(img1_gray, img2_gray, full=True)
+        diff_array = (diff * 255).astype(np.uint8)
+        diff_array = 255 - diff_array
+
+        # Definir um delta para ignorar pequenas diferenças
+        delta = 50  # Ajuste este valor conforme necessário
+
+        # Aplicar o delta (margem de segurança)
+        diff_array[diff_array < delta] = 0
 
         # Exibir as imagens usando Plotly Express
         fig1 = px.imshow(img1_array, title="Imagem 1")
