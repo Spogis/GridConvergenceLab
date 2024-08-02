@@ -42,16 +42,48 @@ def layout_GCI():
                 'marginBottom': '10px'
             }),
             dcc.Input(id='domain-volume', type='number', style={
-                'width': '300px',
+                'width': '200px',
                 'padding': '10px',
                 'fontSize': '16px',
                 'borderRadius': '10px',
                 'border': '2px solid #3498DB',
                 'textAlign': 'center',
                 'marginBottom': '20px',
-                'marginLeft': '20px'
-            })
-        ], style={'textAlign': 'center', 'marginBottom': '20px'}),
+                'marginRight': '10px',
+                'marginLeft': '10px'
+            }),
+        ], style={'textAlign': 'center', 'marginBottom': '20px', 'display': 'flex', 'justifyContent': 'center',
+                  'alignItems': 'center', 'gap': '10px'}),
+
+        html.Div([
+            html.Br(),
+            html.Label("Mesh Type:", style={
+                'fontSize': '16px',
+                'fontWeight': 'bold',
+                'marginBottom': '10px',
+                'marginRight': '10px',
+                'marginLeft': '10px',
+            }),
+            dcc.RadioItems(
+                id='mesh-type',
+                options=[
+                    {'label': '3D', 'value': '3D'},
+                    {'label': '2D', 'value': '2D'},
+                ],
+                labelStyle={
+                    'width': '100px',
+                    'padding': '10px',
+                    'display': 'inline-block',
+                    'marginRight': '20px',
+                    'fontSize': '20px',
+                    'borderRadius': '10px',
+                    'border': '2px solid #3498DB',
+                    'textAlign': 'center',
+                },
+                value='3D'
+            ),
+        ], style={'textAlign': 'center', 'marginBottom': '20px', 'display': 'flex', 'justifyContent': 'center',
+                  'alignItems': 'center', 'gap': '10px'}),
 
         html.Div([
             dash_table.DataTable(

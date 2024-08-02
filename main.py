@@ -32,6 +32,7 @@ from layouts.layout_Picture_Gray import *
 from layouts.layout_Picture_RGB import *
 from layouts.layout_GCI_from_curves import *
 from layouts.layout_GCI_from_pictures import *
+from layouts.layout_references import *
 
 # Import APPS
 from apps.GCI import *
@@ -78,9 +79,14 @@ app.layout = html.Div([
                     style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
                     selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
 
+            dcc.Tab(label='References', value='References',
+                    style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
+                    selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
+
             dcc.Tab(label='About', value='About',
                     style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
                     selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
+
         ], style={'width': '80%', 'margin': '0 auto', 'fontFamily': 'Arial, sans-serif'}),
     ], style={'text-align': 'center'}),
     dcc.Store(id='store-data'),
@@ -102,6 +108,8 @@ def update_tab_content(selected_tab):
         return layout_picture_gray()
     if selected_tab == 'Picture_RGB':
         return layout_picture_rgb()
+    if selected_tab == 'References':
+        return layout_references()
     elif selected_tab == 'About':
         return layout_about()
 
@@ -159,9 +167,10 @@ def add_row(n_clicks, rows, columns):
     State('editable-table', 'data'),
     State('mesh-sizes-table', 'data'),
     State('domain-volume', 'value'),
+    State('mesh-type', 'value'),
     prevent_initial_call=True
 )
-def calculate_gci(n_clicks, rows, mesh, volume):
+def calculate_gci(n_clicks, rows, mesh, volume, mesh_type):
     if n_clicks > 0:
         variables = [row['variable'] for row in rows]
         results_coarse = [float(row['coarse']) for row in rows]
@@ -172,12 +181,17 @@ def calculate_gci(n_clicks, rows, mesh, volume):
         nodes_medium = mesh[0]['medium']
         nodes_fine = mesh[0]['fine']
 
+        if mesh_type == '3D':
+            mesh_type = 3
+        if mesh_type == '2D':
+            mesh_type = 2
+
         p_values, gci_medium_values, gci_fine_values, GCI_asymptotic_values,\
             phi_extrapolated_values, r_fine_list, r_medium_list = (
             calculate_gci_multiple_variables(results_coarse, results_medium,
                                              results_fine, nodes_coarse,
                                              nodes_medium, nodes_fine,
-                                             volume))
+                                             volume, mesh_type))
 
         df_results = pd.DataFrame({
             'Variable': variables,
@@ -192,12 +206,12 @@ def calculate_gci(n_clicks, rows, mesh, volume):
 
         # Formatando os valores
         df_results['p'] = df_results['p'].map(lambda x: f"{x:.2f}")
-        df_results['Medium Mesh GCI'] = df_results['Medium Mesh GCI'].map(lambda x: f"{x:.2%}")
-        df_results['Fine Mesh GCI'] = df_results['Fine Mesh GCI'].map(lambda x: f"{x:.2%}")
+        df_results['Medium Mesh GCI'] = df_results['Medium Mesh GCI'].map(lambda x: f"{x:.1%}")
+        df_results['Fine Mesh GCI'] = df_results['Fine Mesh GCI'].map(lambda x: f"{x:.1%}")
         df_results['GCI Asymptotic'] = df_results['GCI Asymptotic'].map(lambda x: f"{x:.3f}")
         df_results['phi extrapolated'] = df_results['phi extrapolated'].map(lambda x: f"{x:.3e}")
-        df_results['r fine mesh'] = df_results['r fine mesh'].map(lambda x: f"{x:.1f}")
-        df_results['r medium mesh'] = df_results['r medium mesh'].map(lambda x: f"{x:.1f}")
+        df_results['r fine mesh'] = df_results['r fine mesh'].map(lambda x: f"{x:.3f}")
+        df_results['r medium mesh'] = df_results['r medium mesh'].map(lambda x: f"{x:.3f}")
 
         columns = [{'name': col, 'id': col} for col in df_results.columns]
         data = df_results.to_dict('records')
