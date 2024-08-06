@@ -51,13 +51,13 @@ app.layout = html.Div([
     html.Br(),
     html.Div([
         html.Img(src='assets/logo.png',
-                 style={'width': '100%', 'max-width': '2000px', 'height': 'auto', 'margin-left': 'auto',
+                 style={'width': '100%', 'height': 'auto', 'margin-left': 'auto',
                         'margin-right': 'auto', 'position': 'fixed', 'top': '0', 'left': '0', 'z-index': '1000'}),
     ], style={'text-align': 'center', 'margin-bottom': '10px'}),
 
     html.Div([
         html.Div([
-            html.Br(),  # Adiciona um espaço entre o logo e as abas
+            html.Br(),
             dcc.Tabs(id='tabs', value='CGI', children=[
                 dcc.Tab(label='GCI', value='CGI',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
@@ -607,7 +607,7 @@ def parse_image(contents):
      Input('upload-image-2-rgb', 'filename')]
 )
 def update_filenames(filename1, filename2):
-    return f'Imagem 1: {filename1}', f'Imagem 2: {filename2}'
+    return f'Image 1: {filename1}', f'Image 2: {filename2}'
 
 @app.callback(
     [Output('output-analysis-rgb', 'children'),
@@ -688,8 +688,8 @@ def update_output(n_clicks, contents1, filename1, contents2, filename2):
         ]
 
         # Exibir as imagens usando Plotly Express
-        fig1 = px.imshow(img1_array, title="Imagem 1")
-        fig2 = px.imshow(img2_resized_array, title="Imagem 2")
+        fig1 = px.imshow(img1_array, title="Image 1")
+        fig2 = px.imshow(img2_resized_array, title="Image 2")
 
         # Calcular a diferença local entre as imagens usando a distância Euclidiana
         #diff_array = np.linalg.norm(img1_array - img2_resized_array, axis=-1)
@@ -714,9 +714,9 @@ def update_output(n_clicks, contents1, filename1, contents2, filename2):
         diff_array[diff_array < delta] = 0
 
         # Exibir as imagens usando Plotly Express
-        fig1 = px.imshow(img1_array, title="Imagem 1")
-        fig2 = px.imshow(img2_resized_array, title="Imagem 2")
-        fig_diff = px.imshow(diff_array, title="Diferença entre as Imagens", color_continuous_scale='viridis')
+        fig1 = px.imshow(img1_array, title="Image 1")
+        fig2 = px.imshow(img2_resized_array, title="Image 2")
+        fig_diff = px.imshow(diff_array, title="Difference between Images", color_continuous_scale='viridis')
 
         return result_text, fig1, fig2, fig_diff
 
