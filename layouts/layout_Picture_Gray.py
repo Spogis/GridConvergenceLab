@@ -6,13 +6,13 @@ import dash_bootstrap_components as dbc
 
 def layout_picture_gray():
     layout = html.Div([
-        html.Br(),
-        html.H1("Image Upload and Similarity Analysis", style={
-            'textAlign': 'center',
-            'color': '#2C3E50',
-            'fontFamily': 'Arial, sans-serif',
-            'fontWeight': 'bold'
-        }),
+        # html.Br(),
+        # html.H1("Image Upload and Similarity Analysis", style={
+        #     'textAlign': 'center',
+        #     'color': '#2C3E50',
+        #     'fontFamily': 'Arial, sans-serif',
+        #     'fontWeight': 'bold'
+        # }),
         html.Div([
             html.Div([
                 dcc.Upload(

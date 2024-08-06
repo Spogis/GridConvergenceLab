@@ -42,7 +42,7 @@ from apps.stats_from_pics import *
 # Initialize the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-app.title = "Grid Converge Lab"
+app.title = "Grid Convergence Lab"
 
 server = app.server
 
@@ -50,48 +50,83 @@ app.layout = html.Div([
     html.Br(),
     html.Br(),
     html.Div([
-        html.Img(src='assets/logo.png', style={'height': '100px', 'margin-left': 'auto', 'margin-right': 'auto'}),
-    ], style={'text-align': 'center', 'margin-bottom': '20px'}),
+        html.Img(src='assets/logo.png',
+                 style={'width': '100%', 'max-width': '2000px', 'height': 'auto', 'margin-left': 'auto',
+                        'margin-right': 'auto', 'position': 'fixed', 'top': '0', 'left': '0', 'z-index': '1000'}),
+    ], style={'text-align': 'center', 'margin-bottom': '10px'}),
 
     html.Div([
-        dcc.Tabs(id='tabs', value='CGI', children=[
-            dcc.Tab(label='GCI', value='CGI',
-                    style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
-                    selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
-
-            dcc.Tab(label='GCI From Curves', value='CGI_from_curves',
-                    style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
-                    selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
-
-            dcc.Tab(label='GCI From Pictures', value='CGI_from_pictures',
-                    style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
-                    selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
-
-            dcc.Tab(label='XY Plot', value='XY_Plot',
-                    style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
-                    selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
-
-            dcc.Tab(label='Image Analysis (Gray)', value='Picture_Gray',
-                    style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
-                    selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
-
-            dcc.Tab(label='Image Analysis (RGB)', value='Picture_RGB',
-                    style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
-                    selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
-
-            dcc.Tab(label='References', value='References',
-                    style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
-                    selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
-
-            dcc.Tab(label='About', value='About',
-                    style={'fontSize': '16px', 'fontWeight': 'bold', 'padding': '10px', 'backgroundColor': '#ECF0F1'},
-                    selected_style={'fontSize': '16px', 'fontWeight': 'bold', 'backgroundColor': '#3498DB', 'color': 'white', 'padding': '10px'}),
-
-        ], style={'width': '80%', 'margin': '0 auto', 'fontFamily': 'Arial, sans-serif'}),
-    ], style={'text-align': 'center'}),
+        html.Div([
+            html.Br(),  # Adiciona um espaço entre o logo e as abas
+            dcc.Tabs(id='tabs', value='CGI', children=[
+                dcc.Tab(label='GCI', value='CGI',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '5px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+                dcc.Tab(label='GCI From Curves', value='CGI_from_curves',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '5px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+                dcc.Tab(label='GCI From Pictures', value='CGI_from_pictures',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '5px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+                dcc.Tab(label='XY Plot', value='XY_Plot',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '5px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+                dcc.Tab(label='Image Analysis (RGB)', value='Picture_RGB',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '5px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+                dcc.Tab(label='Image Analysis (Gray)', value='Picture_Gray',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '5px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+                dcc.Tab(label='References', value='References',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '5px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+                dcc.Tab(label='About', value='About',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '5px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+            ], style={'display': 'flex', 'flexDirection': 'column', 'height': '100vh', 'width': '220px',
+                      'padding': '10px', 'position': 'fixed',
+                      'margin-top': '100px', 'left': '0', 'z-index': '999'}),
+        ], style={'display': 'flex'}),
+        html.Div(id='tabs-content', style={'flex': 1, 'padding': '10px', 'border-radius': '10px',
+                                           'border': '2px solid #ccc',
+                                           'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)', 'margin-left': '220px',
+                                           'margin-top': '100px', 'overflow-y': 'auto',
+                                           'height': 'calc(100vh - 100px)'})
+    ], style={'display': 'flex'}),
     dcc.Store(id='store-data'),
-    html.Div(id='tabs-content', style={'width': '80%', 'margin': '20px auto', 'fontFamily': 'Arial, sans-serif'}),
-], style={'fontFamily': 'Arial, sans-serif', 'backgroundColor': '#F8F9F9', 'padding': '20px'})
+])
 
 @app.callback(Output('tabs-content', 'children'),
               [Input('tabs', 'value')])
@@ -722,8 +757,6 @@ def import_data_from_curves(n_clicks, contents1, contents2, contents3):
         df = pd.read_excel('setups/Var_Table_GCI_Pictures.xlsx', index_col=None)
         return df.to_dict('records')
     return []
-
-
 
 
 if __name__ == '__main__':

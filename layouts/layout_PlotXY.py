@@ -8,13 +8,13 @@ from dash import html
 
 def layout_XY_Plot():
     layout = html.Div([
-        html.Br(),
-        html.H1("Excel File Upload and Data Analysis", style={
-            'textAlign': 'center',
-            'color': '#2C3E50',
-            'fontFamily': 'Arial, sans-serif',
-            'fontWeight': 'bold'
-        }),
+        # html.Br(),
+        # html.H1("Excel File Upload and Data Analysis", style={
+        #     'textAlign': 'center',
+        #     'color': '#2C3E50',
+        #     'fontFamily': 'Arial, sans-serif',
+        #     'fontWeight': 'bold'
+        # }),
         html.Div([
             html.Div([
                 dcc.Upload(

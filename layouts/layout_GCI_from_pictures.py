@@ -11,13 +11,13 @@ from dash import dash_table
 
 def layout_GCI_from_pictures():
     layout = html.Div([
-        html.Br(),
-        html.H1("GCI Calculation (Grid Convergence Index) from Pictures", style={
-            'textAlign': 'center',
-            'color': '#2C3E50',
-            'fontFamily': 'Arial, sans-serif',
-            'fontWeight': 'bold'
-        }),
+        # html.Br(),
+        # html.H1("GCI Calculation (Grid Convergence Index) from Pictures", style={
+        #     'textAlign': 'center',
+        #     'color': '#2C3E50',
+        #     'fontFamily': 'Arial, sans-serif',
+        #     'fontWeight': 'bold'
+        # }),
 
         html.Div([
             html.Label("Domain Volume:", style={
