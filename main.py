@@ -322,16 +322,21 @@ def parse_contents(contents):
     decoded = base64.b64decode(content_string)
     return pd.read_excel(io.BytesIO(decoded))
 
-@app.callback(
-    [Output('output-file-upload-1', 'children'),
-     Output('output-file-upload-2', 'children'),
-     Output('output-file-upload-3', 'children')],
-    [Input('upload-data-1', 'filename'),
-     Input('upload-data-2', 'filename'),
-     Input('upload-data-3', 'filename')]
-)
-def update_filenames(filename1, filename2, filename3):
-    return f'File 1: {filename1}', f'File 2: {filename2}', f'File 3: {filename3}'
+
+@app.callback([Output('output-file-upload-3', 'children')],
+              [Input('upload-data-3', 'filename')])
+def update_filenames2(filename3):
+    return [f'File 3: {filename3}']
+
+
+@app.callback([Output('output-file-upload-1', 'children'),
+               Output('output-file-upload-2', 'children')],
+              [Input('upload-data-1', 'filename'),
+               Input('upload-data-2', 'filename')])
+def update_filenames(filename1, filename2):
+    return [f'File 1: {filename1}', f'File 2: {filename2}']
+
+
 
 
 @app.callback(
