@@ -237,7 +237,7 @@ def layout_GCI_from_curves_averages():
                 'borderRadius': '10px',
                 'cursor': 'pointer'
             }),
-            html.Button('Save Table', id='save-button', n_clicks=0, style={
+            html.Button('Save Setup', id='save-button', n_clicks=0, style={
                 'width': '300px',
                 'backgroundColor': '#1ABC9C',
                 'color': 'white',
@@ -249,7 +249,7 @@ def layout_GCI_from_curves_averages():
             }),
             dcc.Upload(
                 id='upload-data',
-                children=html.Button('Load Table', style={
+                children=html.Button('Load Setup', style={
                     'width': '300px',
                     'backgroundColor': '#1ABC9C',
                     'color': 'white',
