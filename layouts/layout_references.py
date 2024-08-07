@@ -69,7 +69,7 @@ def layout_references():
                         style={'marginBottom': '20px'},
                         children=[
                             html.A(
-                                'Python Library Used - pyGCS',
+                                'Python Library Used - pyGCS - MIT License',
                                 href='https://github.com/tomrobin-teschner/pyGCS',
                                 target='_blank',
                                 style={
