@@ -33,6 +33,7 @@ from layouts.layout_Picture_RGB import *
 from layouts.layout_GCI_from_curves import *
 from layouts.layout_GCI_from_pictures import *
 from layouts.layout_references import *
+from layouts.layout_GCI_from_curves_averages import *
 
 # Import APPS
 from apps.GCI import *
@@ -73,13 +74,21 @@ app.layout = html.Div([
                                         'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
                                         'border-radius': '5px', 'margin-bottom': '5px',
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
-                dcc.Tab(label='GCI From Pictures', value='CGI_from_pictures',
+                dcc.Tab(label='GCI From Curves Averages', value='CGI_from_curves_averages',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
                                'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
                         selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
                                         'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
                                         'border-radius': '5px', 'margin-bottom': '5px',
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+                dcc.Tab(label='GCI From Pictures', value='CGI_from_pictures',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '50px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '50px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+
                 dcc.Tab(label='XY Plot Analysis', value='XY_Plot',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
                                'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
@@ -96,11 +105,12 @@ app.layout = html.Div([
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
                 dcc.Tab(label='Image Analysis (Gray)', value='Picture_Gray',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
-                               'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
+                               'border-radius': '5px', 'margin-bottom': '50px', 'background-color': '#f9f9f9'},
                         selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
                                         'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
-                                        'border-radius': '5px', 'margin-bottom': '5px',
+                                        'border-radius': '5px', 'margin-bottom': '50px',
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+
                 dcc.Tab(label='References', value='References',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
                                'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
@@ -135,6 +145,8 @@ def update_tab_content(selected_tab):
         return layout_GCI()
     if selected_tab == 'CGI_from_curves':
         return layout_GCI_from_curves()
+    if selected_tab == 'CGI_from_curves_averages':
+        return layout_GCI_from_curves_averages()
     if selected_tab == 'CGI_from_pictures':
         return layout_GCI_from_pictures()
     if selected_tab == 'XY_Plot':
@@ -343,8 +355,8 @@ def update_filenames3(filename3):
 
 @app.callback(
     [Output('editable-table', 'data', allow_duplicate=True),
-     Output('xy-data-graph', 'figure'),
-     Output('xy-data-graph', 'style')],
+     Output('xy-data-graph', 'figure', allow_duplicate=True),
+     Output('xy-data-graph', 'style', allow_duplicate=True)],
     [Input('import-data-button', 'n_clicks')],
     [State('upload-data-1', 'contents'),
      State('upload-data-2', 'contents'),
@@ -406,7 +418,6 @@ def import_data_from_curves(n_clicks, contents1, contents2, contents3, splits):
 
         return [df_data.to_dict('records'), fig, {'display': 'block'}]
     return [[], go.Figure(), {'display': 'none'}]
-
 
 @app.callback(
     [Output('output-analysis', 'children'),
@@ -764,6 +775,101 @@ def import_data_from_curves(n_clicks, contents1, contents2, contents3):
         df = pd.read_excel('setups/Var_Table_GCI_Pictures.xlsx', index_col=None)
         return df.to_dict('records')
     return []
+
+
+########################################################################################################################
+#CGI from Curves Averages
+########################################################################################################################
+
+@app.callback(
+    [Output('editable-table', 'data', allow_duplicate=True),
+     Output('xy-data-graph', 'figure', allow_duplicate=True),
+     Output('xy-data-graph', 'style', allow_duplicate=True)],
+    [Input('import-data-button-averages', 'n_clicks')],
+    [State('upload-data-1', 'contents'),
+     State('upload-data-2', 'contents'),
+     State('upload-data-3', 'contents'),
+     State('splits', 'value'),
+     ],
+    prevent_initial_call=True)
+
+
+def import_data_from_curves(n_clicks, contents1, contents2, contents3, splits):
+    if n_clicks > 0 and contents1 and contents2 and contents3:
+        content1_type, content1_string = contents1.split(',')
+        decoded1 = base64.b64decode(content1_string)
+
+        content2_type, content2_string = contents2.split(',')
+        decoded2 = base64.b64decode(content2_string)
+
+        content3_type, content3_string = contents3.split(',')
+        decoded3 = base64.b64decode(content3_string)
+
+        df_coarse = pd.read_excel(io.BytesIO(decoded1))
+        df_medium = pd.read_excel(io.BytesIO(decoded2))
+        df_fine = pd.read_excel(io.BytesIO(decoded3))
+
+        gci_from_curve_data(df_coarse, df_medium, df_fine, splits)
+        df_data = pd.read_excel('data/curve_for_gci.xlsx')
+
+
+        ### Plot data from curves
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=df_data['x'], y=df_data['coarse'], mode='lines', name='Coarse Mesh'))
+        fig.add_trace(go.Scatter(x=df_data['x'], y=df_data['medium'], mode='lines', name='Medium Mesh'))
+        fig.add_trace(go.Scatter(x=df_data['x'], y=df_data['fine'], mode='lines', name='Fine Mesh'))
+
+        # Obtendo os valores mínimo e máximo de x para definir os limites
+        x_min = df_data['x'].min()
+        x_max = df_data['x'].max()
+
+        # Definindo explicitamente os valores dos ticks
+        tick_vals = df_data['x']
+
+        fig.update_layout(
+            title='XY Imported Data',
+            xaxis_title='X',
+            yaxis_title='Y',
+            xaxis=dict(
+                range=[x_min, x_max],  # Define os limites do eixo x.
+                tickvals=tick_vals,  # Define explicitamente os valores dos ticks.
+                tickformat='.1f',  # Define o formato dos ticks. '.1f' formata com uma casa decimal.
+                nticks=10  # Define o número de ticks. Ajuste conforme necessário.
+            ),
+            width=1000,
+        )
+
+        # Excluindo a coluna 'x'
+        df_data = df_data.drop('x', axis=1)
+
+        mean_coarse = df_data['coarse'].mean()
+        std_coarse = df_data['coarse'].std()
+        var_coarse = df_data['coarse'].var()
+        cv_coarse = std_coarse/mean_coarse
+
+        mean_medium = df_data['medium'].mean()
+        std_medium = df_data['medium'].std()
+        var_medium = df_data['medium'].var()
+        cv_medium = std_medium / mean_medium
+
+        mean_fine = df_data['fine'].mean()
+        std_fine = df_data['fine'].std()
+        var_fine = df_data['fine'].var()
+        cv_fine = std_fine / mean_fine
+
+
+        # Criar o DataFrame com as estatísticas
+        data = {
+            'variable': ['Mean', 'Standard Deviation', 'Variance', 'Coefficient of Variation'],
+            'coarse': [mean_coarse, std_coarse, var_coarse, cv_coarse],
+            'medium': [mean_medium, std_medium, var_medium, cv_medium],
+            'fine': [mean_fine, std_fine, var_fine, cv_fine]
+        }
+
+        df_stats = pd.DataFrame(data)
+
+        return [df_stats.to_dict('records'), fig, {'display': 'block'}]
+    return [[], go.Figure(), {'display': 'none'}]
 
 
 if __name__ == '__main__':
