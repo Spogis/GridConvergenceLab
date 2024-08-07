@@ -82,7 +82,7 @@ app.layout = html.Div([
                                         'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
                                         'border-radius': '5px', 'margin-bottom': '5px',
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
-                dcc.Tab(label='GCI From Pictures', value='CGI_from_pictures',
+                dcc.Tab(label='GCI From Pictures Statistics', value='CGI_from_pictures',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
                                'border-radius': '5px', 'margin-bottom': '50px', 'background-color': '#f9f9f9'},
                         selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
