@@ -412,10 +412,8 @@ def import_data_from_curves(n_clicks, contents1, contents2, contents3, splits):
             width=1000,
         )
 
-        print(df_data)
         # Excluindo a coluna 'x'
         df_data = df_data.drop('x', axis=1)
-        print(df_data)
 
         return [df_data.to_dict('records'), fig, {'display': 'block'}]
     return [[], go.Figure(), {'display': 'none'}]
@@ -771,7 +769,6 @@ def import_data_from_curves(n_clicks, contents1, contents2, contents3):
         df_data['medium'] = df_medium['value']
         df_data['fine'] = df_fine['value']
 
-        print(df_data)
         df_data.to_excel('setups/Var_Table_GCI_Pictures.xlsx')
         df = pd.read_excel('setups/Var_Table_GCI_Pictures.xlsx', index_col=None)
         return df.to_dict('records')
