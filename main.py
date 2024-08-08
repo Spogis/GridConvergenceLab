@@ -34,6 +34,7 @@ from layouts.layout_GCI_from_curves import *
 from layouts.layout_GCI_from_pictures import *
 from layouts.layout_references import *
 from layouts.layout_GCI_from_curves_averages import *
+from layouts.layout_citation import *
 
 # Import APPS
 from apps.GCI import *
@@ -119,6 +120,13 @@ app.layout = html.Div([
                                         'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
                                         'border-radius': '5px', 'margin-bottom': '5px',
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+                dcc.Tab(label='How to cite our work?', value='Citation',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '5px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
                 dcc.Tab(label='About', value='About',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
                                'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
@@ -158,6 +166,8 @@ def update_tab_content(selected_tab):
         return layout_picture_rgb()
     if selected_tab == 'References':
         return layout_references()
+    if selected_tab == 'Citation':
+        return layout_citation()
     elif selected_tab == 'About':
         return layout_about()
 
