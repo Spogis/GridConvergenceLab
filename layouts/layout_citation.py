@@ -41,6 +41,35 @@ def layout_citation():
                             'fontFamily': 'Courier New, monospace'
                         }
                     ),
+                    html.Br(),
+                    dcc.Markdown(
+                        '''
+                        ```bibtex
+                        @software{nicolas_spogis_2024_13288605,
+                            author       = {Nicolas Spogis and
+                                            Diener, Volpin Ribeiro Fontoura},
+                            title        = {Spogis/GridConvergenceLab: v.1.0.1},
+                            month        = aug,
+                            year         = 2024,
+                            publisher    = {Zenodo},
+                            version      = {v.1.0.1},
+                            doi          = {10.5281/zenodo.13288605},
+                            url          = {https://doi.org/10.5281/zenodo.13288605}
+                        }
+                        ```
+                        ''',
+                        style={
+                            'backgroundColor': '#fff',
+                            'padding': '10px',
+                            'borderRadius': '5px',
+                            'boxShadow': '0 2px 4px 0 rgba(0, 0, 0, 0.1)',
+                            'fontSize': '16px',
+                            'lineHeight': '1.5',
+                            'whiteSpace': 'pre-wrap',
+                            'border': '1px solid #ddd',
+                            'fontFamily': 'Courier New, monospace'
+                        }
+                    ),
                     html.P(
                         "Copy the above BibTeX entry for your work.",
                         style={
