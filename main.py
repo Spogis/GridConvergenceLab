@@ -35,11 +35,14 @@ from layouts.layout_GCI_from_pictures import *
 from layouts.layout_references import *
 from layouts.layout_GCI_from_curves_averages import *
 from layouts.layout_citation import *
+from layouts.layout_yplus import *
+from layouts.layout_yplus_impeller import *
 
 # Import APPS
 from apps.GCI import *
 from apps.gci_from_curve_data import *
 from apps.stats_from_pics import *
+from apps.yplus import *
 
 # Initialize the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -63,10 +66,11 @@ app.layout = html.Div([
             dcc.Tabs(id='tabs', value='CGI', children=[
                 dcc.Tab(label='Classic GCI', value='CGI',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
-                               'border-radius': '5px', 'margin-bottom': '50px', 'background-color': '#f9f9f9'},
+                               'border-radius': '5px', 'margin-bottom': '20px', 'margin-top': '20px',
+                               'background-color': '#f9f9f9'},
                         selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
                                         'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
-                                        'border-radius': '5px', 'margin-bottom': '50px',
+                                        'border-radius': '5px', 'margin-bottom': '20px', 'margin-top': '20px',
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
 
                 dcc.Tab(label='GCI From Curves', value='CGI_from_curves',
@@ -85,10 +89,10 @@ app.layout = html.Div([
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
                 dcc.Tab(label='GCI From Pictures Statistics', value='CGI_from_pictures',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
-                               'border-radius': '5px', 'margin-bottom': '50px', 'background-color': '#f9f9f9'},
+                               'border-radius': '5px', 'margin-bottom': '20px', 'background-color': '#f9f9f9'},
                         selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
                                         'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
-                                        'border-radius': '5px', 'margin-bottom': '50px',
+                                        'border-radius': '5px', 'margin-bottom': '20px',
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
 
                 dcc.Tab(label='XY Plot Analysis', value='XY_Plot',
@@ -107,11 +111,27 @@ app.layout = html.Div([
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
                 dcc.Tab(label='Image Analysis (Gray)', value='Picture_Gray',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
-                               'border-radius': '5px', 'margin-bottom': '50px', 'background-color': '#f9f9f9'},
+                               'border-radius': '5px', 'margin-bottom': '20px', 'background-color': '#f9f9f9'},
                         selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
                                         'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
-                                        'border-radius': '5px', 'margin-bottom': '50px',
+                                        'border-radius': '5px', 'margin-bottom': '20px',
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+
+                dcc.Tab(label='Y+', value='Yplus',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '5px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '5px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+                dcc.Tab(label='Y+ for Impellers', value='Yplus_Impeller',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '20px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '20px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+
 
                 dcc.Tab(label='References', value='References',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
@@ -164,6 +184,10 @@ def update_tab_content(selected_tab):
         return layout_picture_gray()
     if selected_tab == 'Picture_RGB':
         return layout_picture_rgb()
+    if selected_tab == 'Yplus':
+        return layout_yplus()
+    if selected_tab == 'Yplus_Impeller':
+        return layout_yplus_impeller()
     if selected_tab == 'References':
         return layout_references()
     if selected_tab == 'Citation':
@@ -879,6 +903,52 @@ def import_data_from_curves(n_clicks, contents1, contents2, contents3, splits):
         return [df_stats.to_dict('records'), fig, {'display': 'block'}]
     return [[], go.Figure(), {'display': 'none'}]
 
+
+########################################################################################################################
+#YPlus
+########################################################################################################################
+
+@app.callback([Output('output-reynolds', 'value'),
+               Output('output-first-layer-thickness', 'value'),
+               Output('output-boundary-layer-thickness', 'value'),
+               Output('output-number-of-layers', 'value')],
+              [Input('input-density', 'value'),
+               Input('input-viscosity', 'value'),
+               Input('input-velocity', 'value'),
+               Input('input-length', 'value'),
+               Input('input-yplus', 'value'),
+               Input('input-growth-rate', 'value')])
+def calculate_yplus(density, viscosity, freestream_velocity, characteristic_length, desired_yplus, growth_rate):
+    Reynolds, DeltaY, Boundary_Layer_Thickness, Number_Of_Layers = yplus(density=density, viscosity=viscosity, freestream_velocity=freestream_velocity,
+                   desired_yplus=desired_yplus, growth_rate=growth_rate,
+                   characteristic_length=characteristic_length, option='Free')
+
+    Reynolds = "{:1.2e}".format(Reynolds)
+    DeltaY = "{:.3e}".format(DeltaY)
+    Boundary_Layer_Thickness = "{:.3e}".format(Boundary_Layer_Thickness)
+
+    return Reynolds, DeltaY, Boundary_Layer_Thickness, Number_Of_Layers
+
+@app.callback([Output('output-reynolds-impeller', 'value'),
+               Output('output-first-layer-thickness-impeller', 'value'),
+               Output('output-boundary-layer-thickness-impeller', 'value'),
+               Output('output-number-of-layers-impeller', 'value')],
+              [Input('input-density-impeller', 'value'),
+               Input('input-viscosity-impeller', 'value'),
+               Input('input-rpm-impeller', 'value'),
+               Input('input-diameter-impeller', 'value'),
+               Input('input-yplus-impeller', 'value'),
+               Input('input-growth-rate-impeller', 'value')])
+def calculate_yplus(density, viscosity, rpm, diameter, desired_yplus, growth_rate):
+    Reynolds, DeltaY, Boundary_Layer_Thickness, Number_Of_Layers = yplus(density=density, viscosity=viscosity, rpm=rpm,
+                   desired_yplus=desired_yplus, growth_rate=growth_rate,
+                   diameter=diameter, option='Impeller')
+
+    Reynolds = "{:1.2e}".format(Reynolds)
+    DeltaY = "{:.3e}".format(DeltaY)
+    Boundary_Layer_Thickness = "{:.3e}".format(Boundary_Layer_Thickness)
+
+    return Reynolds, DeltaY, Boundary_Layer_Thickness, Number_Of_Layers
 
 if __name__ == '__main__':
     app.run_server(debug=False)
