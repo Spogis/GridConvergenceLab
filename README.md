@@ -37,11 +37,29 @@ To install the necessary dependencies, you need to have Python installed on your
 
 ## How to cite Grid Convergence Lab in your publications
 
-```bibtex
-@misc{gridconvergencelab,
-  author = {SPOGIS, N., FONTOURA, D. V. R.},
-  title = {Grid Convergence Lab Toolkit},
-  subtitle = {A Python package for Grid Convergence Index Analysis},
-  note = "https://github.com/Spogis/GridConvergeLab",
-  year = {2024},
-}
+How to cite SimulAI in your publications
+========================================
+
+If you find Grid Convergence Lab to be useful, please consider citing it in your published work:
+
+      @misc{gridconvergencelab,
+         author = {SPOGIS, N., FONTOURA, D. V. R.},
+         title = {Grid Convergence Lab Toolkit},
+         subtitle = {A Python package for Grid Convergence Index Analysis},
+         note = "https://github.com/Spogis/GridConvergeLab",
+         year = {2024},
+      }
+
+or, via Zenodo: 
+
+      @software{nicolas_spogis_2024_13288605,
+        author       = {Nicolas Spogis},
+        title        = {Spogis/GridConvergenceLab: v.1.0.1},
+        month        = aug,
+        year         = 2024,
+        publisher    = {Zenodo},
+        version      = {v.1.0.1},
+        doi          = {10.5281/zenodo.13288605},
+        url          = {https://doi.org/10.5281/zenodo.13288605}
+      }
+
