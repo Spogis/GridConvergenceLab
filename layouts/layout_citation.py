@@ -5,6 +5,7 @@ import os
 def layout_citation():
     layout = html.Div(
         children=[
+            html.Br(),
             html.Div(
                 style={
                     'backgroundColor': '#f9f9f9',
