@@ -21,11 +21,11 @@ def layout_citation():
                         '''
                         ```bibtex
                         @misc{gridconvergencelab,
-                          author = {SPOGIS, N., FONTOURA, D. V. R.},
-                          title = {Grid Convergence Lab Toolkit},
-                          subtitle = {A Python package for Grid Convergence Index Analysis},
-                          note = "https://github.com/Spogis/GridConvergeLab",
-                          year = {2024},
+                            author = {SPOGIS, N., FONTOURA, D. V. R.},
+                            title = {Grid Convergence Lab Toolkit},
+                            subtitle = {A Python package for Grid Convergence Index Analysis},
+                            note = "https://github.com/Spogis/GridConvergeLab",
+                            year = {2024},
                         }
                         ```
                         ''',
