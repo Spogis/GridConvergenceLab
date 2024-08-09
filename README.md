@@ -53,7 +53,8 @@ If you find Grid Convergence Lab to be useful, please consider citing it in your
 or, via Zenodo: 
 
       @software{nicolas_spogis_2024_13288605,
-        author       = {Nicolas Spogis},
+        author       = {Nicolas Spogis and
+                        Diener, Volpin Ribeiro Fontoura},
         title        = {Spogis/GridConvergenceLab: v.1.0.1},
         month        = aug,
         year         = 2024,
