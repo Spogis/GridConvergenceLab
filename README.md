@@ -1,4 +1,4 @@
-# Grid Converge Lab
+# Grid Convergence Lab
 
 Grid Convergence Index (GCI) Analysis is a technique used to assess the accuracy of numerical simulations, particularly those involving finite element methods (FEM), finite volume methods (FVM), or finite difference methods (FDM). In simple terms, GCI is a systematic method for quantifying the numerical error associated with mesh discretization in computational simulations.
 
