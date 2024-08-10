@@ -41,9 +41,6 @@ To install the necessary dependencies, you need to have Python installed on your
 
 ## How to cite Grid Convergence Lab in your publications
 
-How to cite SimulAI in your publications
-========================================
-
 If you find Grid Convergence Lab to be useful, please consider citing it in your published work:
 
       @misc{gridconvergencelab,
