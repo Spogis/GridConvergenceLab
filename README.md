@@ -34,6 +34,10 @@ To install the necessary dependencies, you need to have Python installed on your
 2. **Install Dependencies**: Within the project directory, locate the `requirements.txt` file containing all necessary libraries. Install them by running:
    ```bash
    pip install -r requirements.txt
+   
+## Video - How to use?
+
+[![Watch the video](https://img.youtube.com/vi/2603w_Pm6xY/0.jpg)](https://youtu.be/2603w_Pm6xY)
 
 ## How to cite Grid Convergence Lab in your publications
 
