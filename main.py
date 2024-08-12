@@ -37,6 +37,7 @@ from layouts.layout_GCI_from_curves_averages import *
 from layouts.layout_citation import *
 from layouts.layout_yplus import *
 from layouts.layout_yplus_impeller import *
+from layouts.layout_GCI_First_Analysis import *
 
 # Import APPS
 from apps.GCI import *
@@ -66,11 +67,18 @@ app.layout = html.Div([
             dcc.Tabs(id='tabs', value='CGI', children=[
                 dcc.Tab(label='Classic GCI', value='CGI',
                         style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
-                               'border-radius': '5px', 'margin-bottom': '20px', 'margin-top': '20px',
+                               'border-radius': '5px', 'margin-bottom': '5px', 'margin-top': '20px',
                                'background-color': '#f9f9f9'},
                         selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
                                         'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
-                                        'border-radius': '5px', 'margin-bottom': '20px', 'margin-top': '20px',
+                                        'border-radius': '5px', 'margin-bottom': '5px', 'margin-top': '20px',
+                                        'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
+                dcc.Tab(label='First Analysis', value='First',
+                        style={'fontSize': '14px', 'width': '200px', 'padding': '10px', 'border': '1px solid #ccc',
+                               'border-radius': '5px', 'margin-bottom': '20px', 'background-color': '#f9f9f9'},
+                        selected_style={'fontSize': '14px', 'backgroundColor': '#007BFF', 'color': 'white',
+                                        'width': '200px', 'padding': '10px', 'border': '1px solid #007BFF',
+                                        'border-radius': '5px', 'margin-bottom': '20px',
                                         'box-shadow': '0px 4px 8px rgba(0, 0, 0, 0.1)'}),
 
                 dcc.Tab(label='GCI From Curves', value='CGI_from_curves',
@@ -172,6 +180,8 @@ app.layout = html.Div([
 def update_tab_content(selected_tab):
     if selected_tab == 'CGI':
         return layout_GCI()
+    if selected_tab == 'First':
+        return layout_GCI_First_Analysis()
     if selected_tab == 'CGI_from_curves':
         return layout_GCI_from_curves()
     if selected_tab == 'CGI_from_curves_averages':
@@ -949,6 +959,51 @@ def calculate_yplus(density, viscosity, rpm, diameter, desired_yplus, growth_rat
     Boundary_Layer_Thickness = "{:.3e}".format(Boundary_Layer_Thickness)
 
     return Reynolds, DeltaY, Boundary_Layer_Thickness, Number_Of_Layers
+
+
+########################################################################################################################
+#First Analysis
+########################################################################################################################
+@app.callback(Output('mesh-phi-table', 'data', allow_duplicate=True),
+              Output('output-graph_mesh', 'figure', allow_duplicate=True),
+              Output('output-graph_mesh', 'style', allow_duplicate=True),
+              Input('upload-phi-table', 'contents'),
+              State('upload-phi-table', 'filename'),
+              prevent_initial_call=True)
+def load_table(contents, filename):
+    if contents is None:
+        return [[], go.Figure(), {'display': 'none'}]
+    content_type, content_string = contents.split(',')
+    decoded = base64.b64decode(content_string)
+    df = pd.read_excel(io.BytesIO(decoded))
+
+    # Valores únicos de df['Mesh'] para os marcadores de escala
+    x_values = df['Mesh'].unique()
+    x_values_sorted = sorted(x_values)  # Garantir que os valores estão ordenados
+
+    # Plot data from curves
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=df['Mesh'],
+        y=df['phi'],
+        mode='lines+markers',
+        name='GCI',
+        line=dict(color='blue', shape='spline'),  # Cor e suavização da linha
+        marker=dict(color='orange', size=10)  # Cor e tamanho dos pontos
+    ))
+
+    fig.update_layout(
+        xaxis_title='Mesh Size',
+        yaxis_title='phi',
+        width=800,
+        xaxis=dict(
+            range=[min(x_values), max(x_values)*1.05],  # Define o intervalo do eixo x
+            tickvals=x_values_sorted,  # Define os valores dos marcadores de escala
+            ticktext=[str(val) for val in x_values_sorted]  # Rótulos dos marcadores de escala
+        )
+    )
+
+    return [df.to_dict('records'), fig, {'display': 'block'}]
 
 
 if __name__ == '__main__':
