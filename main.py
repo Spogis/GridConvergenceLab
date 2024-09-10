@@ -478,6 +478,8 @@ def update_output(n_clicks, contents1, filename1, contents2, filename2):
 
         # Interpolação
         x_common = np.linspace(min(df1['x'].min(), df2['x'].min()), max(df1['x'].max(), df2['x'].max()), 100)
+        df1 = df1.drop_duplicates()
+        df2 = df2.drop_duplicates()
         spline1 = interp1d(df1['x'], df1['y'], kind='cubic', fill_value="extrapolate")
         spline2 = interp1d(df2['x'], df2['y'], kind='cubic', fill_value="extrapolate")
         y1_interp = spline1(x_common)

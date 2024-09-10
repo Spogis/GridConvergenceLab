@@ -10,6 +10,10 @@ def gci_from_curve_data(df_coarse, df_medium, df_fine, N_Splits):
                            max(df_coarse['x'].max(), df_medium['x'].max(), df_fine['x'].max()),
                            N_Splits)
 
+    df_coarse = df_coarse.drop_duplicates()
+    df_medium = df_medium.drop_duplicates()
+    df_fine = df_fine.drop_duplicates()
+
     spline_coarse = interp1d(df_coarse['x'], df_coarse['y'], kind='cubic', fill_value="extrapolate")
     spline_medium = interp1d(df_medium['x'], df_medium['y'], kind='cubic', fill_value="extrapolate")
     spline_fine = interp1d(df_fine['x'], df_fine['y'], kind='cubic', fill_value="extrapolate")
